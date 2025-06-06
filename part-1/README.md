@@ -32,6 +32,99 @@ B --> |Database Operations| C
 
 ## 1. Detailed Class Diagram for Business Logic Layer
 
+This diagram illustrates the core business entities of the HBnB application: User, Place, Review, and Amenity. Each inherits from BaseModel, which defines shared attributes like id, created_at, and updated_at.
+
+Key relationships are shown:
+
+A User can own multiple Places and write multiple Reviews.
+
+A Place belongs to one User, can have many Reviews, and is linked to multiple Amenitys through AmenityPlace.
+
+Reviews connect a User to a Place.
+
+Amenitys can be linked to many Places.
+
+
+```mermaid
+classDiagram
+
+class BaseModel {
+    <<abstract>>
+    +UUID id
+    +DATE created_at
+    +DATE updated_at
+    +update()
+    +delete()
+  }
+  
+  class User {
+    +str first_name
+    +str last_name
+    -str email
+    -str password
+    +sign_up()
+    +login()
+    -set_password(password)setter
+    -check_password(password)getter
+    +write_review()
+    +delete()
+    +update()
+  }
+  
+  class Place {
+    +str name
+    +str location
+    +float price_by_night
+    +str currency
+    +float rating
+    -UUID user_id
+    +get_owner()
+    +add_amenity()
+    +remove_amenity()
+    +show_reviews()
+    +update()
+    +delete()
+  }
+
+  class Review {
+    -UUID user_id
+    -UUID place_id
+    +int rating
+    +str comment
+    +get_user()
+    +get_place()
+    +write_review()
+    +update()
+    +delete()
+  }
+
+  class Amenity {
+    +str name
+    +display(place_id)
+    +update()
+    +delete()
+  }
+
+  class AmenityPlace {
+    -UUID amenity_id
+    -UUID place_id
+  }
+
+BaseModel <|-- User
+BaseModel <|-- Place
+BaseModel <|-- Amenity
+BaseModel <|-- Review
+
+User "1" --> "many" Review : Writes
+User "1" --> "many" Place : Owns
+Place "1" --> "many" Review : Has
+Place "1" --> "1" User : Belongs to
+Place "1" --> "many" AmenityPlace
+Amenity "1" --> "many" AmenityPlace
+
+```
+
+
 ## 2. Sequence Diagrams for API Calls
 These sequence diagrams showcase the detailed process of the requests of the APIs, the logic models as well as the database responses, upon user requests.
 
