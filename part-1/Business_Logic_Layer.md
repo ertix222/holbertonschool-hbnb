@@ -15,6 +15,7 @@ class BaseModel {
     +str last_name
     -str email
     -str password
+    -boolean is_admin
     +sign_up()
     +login()
     -set_password(password)setter
