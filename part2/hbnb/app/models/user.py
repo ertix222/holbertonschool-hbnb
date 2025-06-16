@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from basemodel import BaseModel
+from app.models.basemodel import BaseModel
 import re
 """User"""
 
@@ -17,26 +17,27 @@ class User(BaseModel):
             first_name (str): The user's first name
             last_name (str): The user's last name
             email (str): The user's email adress
-            is_admin (bool, optional): _description_. Defaults to False.
+            is_admin (bool, optional): Whether or not the user is admin.
+                Defaults to False.
         """
-        super().__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.is_admin = is_admin
+        super().__init__()
 
     @property
     def first_name(self):
         """User first name getter
 
         Returns:
-            str: The user's first name (privates it)
+            str: The user's first name
         """
         return self.__first_name
 
     @first_name.setter
     def first_name(self, value):
-        """User first name setter
+        """User first name setter (privates it)
 
         Args:
             value (str): What should be the user's first name
@@ -46,9 +47,9 @@ class User(BaseModel):
             ValueError: If it's empty or longer than 50 characters
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("First name must be a string.")
+            raise TypeError("User first name must be a string.")
         if value == "" or len(value) > 50:
-            raise ValueError("You must enter a first name\
+            raise ValueError("User first name must be\
                 between 1 and 50 characters.")
         self.__first_name = value
 
@@ -57,13 +58,13 @@ class User(BaseModel):
         """User last name getter
 
         Returns:
-            str: The user's last name (privates it)
+            str: The user's last name
         """
         return self.__last_name
 
     @last_name.setter
     def last_name(self, value):
-        """User last name setter
+        """User last name setter (privates it)
 
         Args:
             value (str): What should be the user's last name
@@ -73,9 +74,9 @@ class User(BaseModel):
             ValueError: If it's empty or longer than 50 characters
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("Last name must be a string.")
+            raise TypeError("User last name must be a string.")
         if value == "" or len(value) > 50:
-            raise ValueError("You must enter a last name\
+            raise ValueError("User last name must be\
                 between 1 and 50 characters.")
         self.__last_name = value
 
@@ -84,13 +85,13 @@ class User(BaseModel):
         """User email address getter
 
         Returns:
-            str: The user's email address (privates it)
+            str: The user's email address
         """
         return self.__email
 
     @email.setter
     def email(self, value):
-        """User email address setter
+        """User email address setter (privates it)
 
         Args:
             value (str): What should be the user's email
@@ -100,9 +101,9 @@ class User(BaseModel):
             ValueError: If it's empty or not in the right email format
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("Email must be a string.")
+            raise TypeError("User email must be a string.")
         if value == "" or not self.email_validator(value):
-            raise ValueError("You must enter a valid email with this format:\
+            raise ValueError("User email must be in the following format:\
                 example123@example.com).")
         self.__email = value
 
