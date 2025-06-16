@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from basemodel import BaseModel
+from app.models.basemodel import BaseModel
 import re
 """User"""
 
