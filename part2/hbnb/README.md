@@ -49,3 +49,21 @@ Set the business logic's classes according to the concepts ([see part 1](../../p
     - `last_name`: User's non empty last name. Maximum length of 50 characters. Everyone has a last name right?
     - `email`: User's unique electronic mail adress. You can't be on HBnB without an email (also we hope there won't be SQL injections).
     - `is_admin`: What if the user is an administrator? Defaults to `False` for obvious purposes.
+
+- **`Place` Class [(see place module)](app/models/place.py)**:
+    - `title`: Place's non empty title. Maximum length of 100 characters.
+    - `description`: Place's optional description. Describes the place independently of other attributes.
+    - `price`: Place's price per night. Must be positive (let's asssume renting places in HBnB is never free).
+    - `latitude`: Place's GPS latitude coordinates from -90° to 90° (positive is from equator to north pole).
+    - `longitude`: Place's GPS longitude coordinates from -180 to 180° (positive is from Greenwich meridian to date change line).
+    - `owner`: Place's owner. It must be an exisiting instance of the aforementioned `User` class.
+
+- **`Place` Class [(see place module)](app/models/place.py)**:
+    - `text`: Review non empty text.
+    - `rating`: Rating within the review, from 1 to 5.
+    - `place`: The reviewed place. It must be an exisiting instance of the aforementioned `Place` class.
+    - `user`: Review writer. It must be an exisiting instance of the aforementioned `User` class.
+
+- **`Amenity` Class [(see place module)](app/models/amenity.py)**:
+    - `name`: The non empty name given to the amenity. Maximum length of 50 characters.
+        - Maybe implement a way to avoid dupes? (in the database?)

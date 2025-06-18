@@ -1,7 +1,7 @@
 #!/usr/bin/python3
+"""Place module"""
 from basemodel import BaseModel
-"""Place"""
-
+from user import User
 
 class Place(BaseModel):
     """HBnB place class
@@ -15,7 +15,7 @@ class Place(BaseModel):
 
         Args:
             title (str): The place's name or title
-            price (str): The price per night for the place
+            price (float): The price per night for the place
             latitude (float): Latitude coordinate for the place location
                 between -90.0 and 90.0
             longitude (float): Latitude coordinate for the place location
@@ -39,11 +39,11 @@ class Place(BaseModel):
         Returns:
             str: The place's title
         """
-        return self.__title
+        return self.title
 
     @title.setter
     def title(self, value):
-        """Place title setter (privates it)
+        """Place title setter
 
         Args:
             value (str): What should be the place's title
@@ -57,7 +57,7 @@ class Place(BaseModel):
         if value == "" or len(value) > 100:
             raise ValueError("Place title must be\
                 between 1 and 100 characters.")
-        self.__title = value
+        self.title = value
 
     @property
     def description(self):
@@ -66,11 +66,11 @@ class Place(BaseModel):
         Returns:
             str: The place's description
         """
-        return self.__description
+        return self.description
 
     @description.setter
     def description(self, value):
-        """Place description setter (privates it)
+        """Place description setter
 
         Args:
             value (str): What should be the place's description
@@ -80,4 +80,105 @@ class Place(BaseModel):
         """
         if not (value and isinstance(value, str)):
             raise TypeError("Place description must be a string.")
-        self.__description = value
+        self.description = value
+
+    @property
+    def price(self):
+        """Place price getter
+
+        Returns:
+            float: The place's price
+        """
+        return self.price
+
+    @price.setter
+    def price(self, value):
+        """Place price setter
+
+        Args:
+            value (float): What should be the place's price
+
+        Raises:
+            TypeError: If it's not a float or doesn't exist
+            ValueError: If it's negative or zero
+        """
+        if not (value and isinstance(value, float)):
+            raise TypeError("Place price must be a float number.")
+        if value < 0:
+            raise ValueError("Place price must be positive.")
+        self.price = value
+
+    @property
+    def latitude(self):
+        """Place latitude getter
+
+        Returns:
+            float: The place's latitude (north to south)
+        """
+        return self.latitude
+
+    @latitude.setter
+    def latitude(self, value):
+        """Place latitude setter
+
+        Args:
+            value (float): What should be the place's latitude
+
+        Raises:
+            TypeError: If it's not a float or doesn't exist
+            ValueError: If it's outside of the -90~90 degrees range
+        """
+        if not (value and isinstance(value, float)):
+            raise TypeError("Place latitude must be a float number.")
+        if not (-90.0 < value <= 90.0) :
+            raise ValueError("Place latitude must be between -90.0 and 90.0.")
+        self.latitude = value
+
+    @property
+    def longitude(self):
+        """Place longitude getter
+
+        Returns:
+            float: The place's longitude (meridian)
+        """
+        return self.longitude
+
+    @longitude.setter
+    def longitude(self, value):
+        """Place longitude setter
+
+        Args:
+            value (float): What should be the place's longitude
+
+        Raises:
+            TypeError: If it's not a float or doesn't exist
+            ValueError: If it's outside of the -180~180 degrees range
+        """
+        if not (value and isinstance(value, float)):
+            raise TypeError("Place longitude must be a float number.")
+        if not (-180.0 < value <= 180.0) :
+            raise ValueError("Place longitude must be between -180.0 and 180.0.")
+        self.longitude = value
+
+    @property
+    def owner(self):
+        """Place owner getter
+
+        Returns:
+            User: The place's owner
+        """
+        return self.__owner
+
+    @owner.setter
+    def owner(self, value):
+        """Place owner setter (privates it)
+
+        Args:
+            value (User): What should be the place's owner
+
+        Raises:
+            TypeError: If it's not a user or doesn't exist
+        """
+        if not (value and isinstance(value, User)):
+            raise TypeError("Place owner must be an existing user.")
+        self.__owner = value

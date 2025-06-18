@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from app.models.basemodel import BaseModel
 import re
-"""User"""
+"""User module"""
 
 
 class User(BaseModel):
@@ -33,11 +33,11 @@ class User(BaseModel):
         Returns:
             str: The user's first name
         """
-        return self.__first_name
+        return self.first_name
 
     @first_name.setter
     def first_name(self, value):
-        """User first name setter (privates it)
+        """User first name setter
 
         Args:
             value (str): What should be the user's first name
@@ -51,7 +51,7 @@ class User(BaseModel):
         if value == "" or len(value) > 50:
             raise ValueError("User first name must be\
                 between 1 and 50 characters.")
-        self.__first_name = value
+        self.first_name = value
 
     @property
     def last_name(self):
@@ -64,7 +64,7 @@ class User(BaseModel):
 
     @last_name.setter
     def last_name(self, value):
-        """User last name setter (privates it)
+        """User last name setter
 
         Args:
             value (str): What should be the user's last name
@@ -78,7 +78,7 @@ class User(BaseModel):
         if value == "" or len(value) > 50:
             raise ValueError("User last name must be\
                 between 1 and 50 characters.")
-        self.__last_name = value
+        self.last_name = value
 
     @property
     def email(self):
