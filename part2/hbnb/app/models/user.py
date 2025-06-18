@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from app.models.basemodel import BaseModel
+from .basemodel import BaseModel
 import re
 """User module"""
 
@@ -26,6 +26,8 @@ class User(BaseModel):
         self.is_admin = is_admin
         super().__init__()
 
+        self.places = []
+
     @property
     def first_name(self):
         """User first name getter
@@ -33,7 +35,7 @@ class User(BaseModel):
         Returns:
             str: The user's first name
         """
-        return self.first_name
+        return self.__first_name
 
     @first_name.setter
     def first_name(self, value):
@@ -51,7 +53,7 @@ class User(BaseModel):
         if value == "" or len(value) > 50:
             raise ValueError("User first name must be\
                 between 1 and 50 characters.")
-        self.first_name = value
+        self.__first_name = value
 
     @property
     def last_name(self):
@@ -78,7 +80,7 @@ class User(BaseModel):
         if value == "" or len(value) > 50:
             raise ValueError("User last name must be\
                 between 1 and 50 characters.")
-        self.last_name = value
+        self.__last_name = value
 
     @property
     def email(self):
@@ -119,3 +121,7 @@ class User(BaseModel):
         """
         return re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
                         value) is not None
+
+    def add_place(self, place):
+        """Add a place to the user."""
+        self.places.append(place)

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from basemodel import BaseModel
+from .basemodel import BaseModel
 """Amenity module"""
 
 
@@ -7,7 +7,8 @@ class Amenity(BaseModel):
     """HBnB amenity class
 
     Args:
-        BaseModel (class): Base class for all objects, that amenities inherit of
+        BaseModel (class): Base class for all objects,
+            that amenities inherit of
     """
     def __init__(self, name):
         """Amenity constructor
@@ -18,6 +19,8 @@ class Amenity(BaseModel):
         self.name = name
         super().__init__()
 
+        self.places = []
+
     @property
     def name(self):
         """Amenity name getter
@@ -25,7 +28,7 @@ class Amenity(BaseModel):
         Returns:
             str: The amenity's name
         """
-        return self.name
+        return self.__name
 
     @name.setter
     def name(self, value):
@@ -43,4 +46,16 @@ class Amenity(BaseModel):
         if value == "" or len(value) > 50:
             raise ValueError("Amenity name must be\
                 between 1 and 50 characters.")
-        self.name = value
+        self.__name = value
+
+    def add_place(self, place):
+        """Add a place to the amenity."""
+        self.places.append(place)
+
+    def __str__(self):
+        """String representation of the amenity
+
+        Returns:
+            str: The string representation of the amenity
+        """
+        return "<{}>".format(self.__name)

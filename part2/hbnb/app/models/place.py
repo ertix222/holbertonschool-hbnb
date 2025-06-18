@@ -1,13 +1,15 @@
 #!/usr/bin/python3
 """Place module"""
-from basemodel import BaseModel
-from user import User
+from .basemodel import BaseModel
+from .user import User
+
 
 class Place(BaseModel):
     """HBnB place class
 
     Args:
-        BaseModel (class): Base class for all objects, that places inherit of
+        BaseModel (class): Base class for all objects,
+            that places inherit of
     """
     def __init__(self, title, price, latitude, longitude, owner,
                  description=""):
@@ -32,6 +34,10 @@ class Place(BaseModel):
         self.owner = owner
         super().__init__()
 
+        self.owner.add_place(self)
+        self.reviews = []
+        self.amenities = []
+
     @property
     def title(self):
         """Place title getter
@@ -39,7 +45,7 @@ class Place(BaseModel):
         Returns:
             str: The place's title
         """
-        return self.title
+        return self.__title
 
     @title.setter
     def title(self, value):
@@ -57,7 +63,7 @@ class Place(BaseModel):
         if value == "" or len(value) > 100:
             raise ValueError("Place title must be\
                 between 1 and 100 characters.")
-        self.title = value
+        self.__title = value
 
     @property
     def description(self):
@@ -66,7 +72,7 @@ class Place(BaseModel):
         Returns:
             str: The place's description
         """
-        return self.description
+        return self.__description
 
     @description.setter
     def description(self, value):
@@ -80,7 +86,7 @@ class Place(BaseModel):
         """
         if not (value and isinstance(value, str)):
             raise TypeError("Place description must be a string.")
-        self.description = value
+        self.__description = value
 
     @property
     def price(self):
@@ -89,7 +95,7 @@ class Place(BaseModel):
         Returns:
             float: The place's price
         """
-        return self.price
+        return self.__price
 
     @price.setter
     def price(self, value):
@@ -102,11 +108,11 @@ class Place(BaseModel):
             TypeError: If it's not a float or doesn't exist
             ValueError: If it's negative or zero
         """
-        if not (value and isinstance(value, float)):
+        if not (value and (isinstance(value, float) or isinstance(value, int))):
             raise TypeError("Place price must be a float number.")
         if value < 0:
             raise ValueError("Place price must be positive.")
-        self.price = value
+        self.__price = value
 
     @property
     def latitude(self):
@@ -115,7 +121,7 @@ class Place(BaseModel):
         Returns:
             float: The place's latitude (north to south)
         """
-        return self.latitude
+        return self.__latitude
 
     @latitude.setter
     def latitude(self, value):
@@ -130,9 +136,9 @@ class Place(BaseModel):
         """
         if not (value and isinstance(value, float)):
             raise TypeError("Place latitude must be a float number.")
-        if not (-90.0 < value <= 90.0) :
+        if not (-90.0 < value <= 90.0):
             raise ValueError("Place latitude must be between -90.0 and 90.0.")
-        self.latitude = value
+        self.__latitude = value
 
     @property
     def longitude(self):
@@ -141,7 +147,7 @@ class Place(BaseModel):
         Returns:
             float: The place's longitude (meridian)
         """
-        return self.longitude
+        return self.__longitude
 
     @longitude.setter
     def longitude(self, value):
@@ -156,9 +162,10 @@ class Place(BaseModel):
         """
         if not (value and isinstance(value, float)):
             raise TypeError("Place longitude must be a float number.")
-        if not (-180.0 < value <= 180.0) :
-            raise ValueError("Place longitude must be between -180.0 and 180.0.")
-        self.longitude = value
+        if not (-180.0 < value <= 180.0):
+            raise ValueError("Place longitude must be\
+                between -180.0 and 180.0.")
+        self.__longitude = value
 
     @property
     def owner(self):
@@ -182,3 +189,16 @@ class Place(BaseModel):
         if not (value and isinstance(value, User)):
             raise TypeError("Place owner must be an existing user.")
         self.__owner = value
+
+    def add_review(self, review):
+        """Add a review to the place."""
+        self.reviews.append(review)
+
+    def add_amenity(self, amenity):
+        """Add an amenity to the place."""
+        self.amenities.append(amenity)
+
+    def list_amenities(self):
+        """List amenities associated with the place"""
+        for i in self.amenities:
+            print(i)

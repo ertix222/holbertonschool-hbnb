@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """Review module"""
-from basemodel import BaseModel
-from user import User
-from place import Place
+from .basemodel import BaseModel
+from .user import User
+from .place import Place
 
 
 class Review(BaseModel):
@@ -33,7 +33,7 @@ class Review(BaseModel):
         Returns:
             str: The review's text
         """
-        return self.text
+        return self.__text
 
     @text.setter
     def text(self, value):
@@ -50,7 +50,7 @@ class Review(BaseModel):
             raise TypeError("Review text must be a string.")
         if value == "":
             raise ValueError("Review text must not be textless")
-        self.text = value
+        self.__text = value
 
     @property
     def rating(self):
@@ -59,7 +59,7 @@ class Review(BaseModel):
         Returns:
             int: The review's rating
         """
-        return self.rating
+        return self.__rating
 
     @rating.setter
     def rating(self, value):
@@ -76,7 +76,7 @@ class Review(BaseModel):
             raise TypeError("Review rating must be an integer.")
         if not (1 <= value <= 5):
             raise ValueError("Review rating must be between 1 and 5.")
-        self.rating = value
+        self.__rating = value
 
     @property
     def place(self):
