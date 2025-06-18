@@ -45,7 +45,7 @@ class Amenity(BaseModel):
             raise TypeError("Amenity name must be a string.")
         if value == "" or len(value) > 50:
             raise ValueError("Amenity name must be\
-                between 1 and 50 characters.")
+between 1 and 50 characters.")
         self.__name = value
 
     def add_place(self, place):

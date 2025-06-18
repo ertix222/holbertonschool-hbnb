@@ -52,7 +52,7 @@ class User(BaseModel):
             raise TypeError("User first name must be a string.")
         if value == "" or len(value) > 50:
             raise ValueError("User first name must be\
-                between 1 and 50 characters.")
+between 1 and 50 characters.")
         self.__first_name = value
 
     @property
@@ -79,7 +79,7 @@ class User(BaseModel):
             raise TypeError("User last name must be a string.")
         if value == "" or len(value) > 50:
             raise ValueError("User last name must be\
-                between 1 and 50 characters.")
+between 1 and 50 characters.")
         self.__last_name = value
 
     @property
@@ -105,8 +105,8 @@ class User(BaseModel):
         if not (value and isinstance(value, str)):
             raise TypeError("User email must be a string.")
         if value == "" or not self.email_validator(value):
-            raise ValueError("User email must be in the following format:\
-                example123@example.com).")
+            raise ValueError("User email must be in the following format: "
+"example123@example.com).")
         self.__email = value
 
     @staticmethod

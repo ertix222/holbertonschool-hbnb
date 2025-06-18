@@ -62,7 +62,7 @@ class Place(BaseModel):
             raise TypeError("Place title must be a string.")
         if value == "" or len(value) > 100:
             raise ValueError("Place title must be\
-                between 1 and 100 characters.")
+between 1 and 100 characters.")
         self.__title = value
 
     @property
@@ -164,7 +164,7 @@ class Place(BaseModel):
             raise TypeError("Place longitude must be a float number.")
         if not (-180.0 < value <= 180.0):
             raise ValueError("Place longitude must be\
-                between -180.0 and 180.0.")
+between -180.0 and 180.0.")
         self.__longitude = value
 
     @property
