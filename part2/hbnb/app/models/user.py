@@ -106,7 +106,7 @@ between 1 and 50 characters.")
             raise TypeError("User email must be a string.")
         if value == "" or not self.email_validator(value):
             raise ValueError("User email must be in the following format: "
-"example123@example.com).")
+                             + "ex-am_ple123@ex-am_ple.com).")
         self.__email = value
 
     @staticmethod
@@ -119,7 +119,7 @@ between 1 and 50 characters.")
         Returns:
             bool: Whether the email is valid or not
         """
-        return re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+        return re.match(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}$",
                         value) is not None
 
     def add_place(self, place):

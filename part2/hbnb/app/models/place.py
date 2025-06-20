@@ -108,7 +108,8 @@ between 1 and 100 characters.")
             TypeError: If it's not a float or doesn't exist
             ValueError: If it's negative or zero
         """
-        if not (value and (isinstance(value, float) or isinstance(value, int))):
+        if not (value and (isinstance(value, float)
+                           or isinstance(value, int))):
             raise TypeError("Place price must be a float number.")
         if value < 0:
             raise ValueError("Place price must be positive.")
@@ -199,6 +200,6 @@ between -180.0 and 180.0.")
         self.amenities.append(amenity)
 
     def list_amenities(self):
-        """List amenities associated with the place"""
+        """List of amenities associated with the place"""
         for i in self.amenities:
             print(i)

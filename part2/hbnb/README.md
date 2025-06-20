@@ -49,6 +49,8 @@ Set the business logic's classes according to the concepts ([see part 1](../../p
     - `last_name`: User's non empty last name. Maximum length of 50 characters. Everyone has a last name right?
     - `email`: User's unique electronic mail adress. You can't be on HBnB without an email (also we hope there won't be SQL injections).
     - `is_admin`: What if the user is an administrator? Defaults to `False` for obvious purposes.
+    - **Relationships:**
+        - `places`: All places the user owns. Implemented with `add_place()`, called upon a `Place` construction.
 
 - **`Place` Class [(see place module)](app/models/place.py)**:
     - `title`: Place's non empty title. Maximum length of 100 characters.
@@ -57,8 +59,11 @@ Set the business logic's classes according to the concepts ([see part 1](../../p
     - `latitude`: Place's GPS latitude coordinates from -90° to 90° (positive is from equator to north pole).
     - `longitude`: Place's GPS longitude coordinates from -180 to 180° (positive is from Greenwich meridian to date change line).
     - `owner`: Place's owner. It must be an exisiting instance of the aforementioned `User` class.
+    - **Relationships:**
+        - `reviews`: All place reviews list. Implemented with `add_review()`, called upon a `Review` construction.
+        - `amenities`: All place amenities list. Implemented with `add_amenity()`, and can be printed with `list_amenities()`.
 
-- **`Place` Class [(see place module)](app/models/place.py)**:
+- **`Review` Class [(see place module)](app/models/place.py)**:
     - `text`: Review non empty text.
     - `rating`: Rating within the review, from 1 to 5.
     - `place`: The reviewed place. It must be an exisiting instance of the aforementioned `Place` class.
@@ -67,3 +72,5 @@ Set the business logic's classes according to the concepts ([see part 1](../../p
 - **`Amenity` Class [(see place module)](app/models/amenity.py)**:
     - `name`: The non empty name given to the amenity. Maximum length of 50 characters.
         - Maybe implement a way to avoid dupes? (in the database?)
+    - **Relationships:**
+        - `places`: List of places tied to the amenity. Implemented with `add_place()`, and prints the instance with `__str__()`.
