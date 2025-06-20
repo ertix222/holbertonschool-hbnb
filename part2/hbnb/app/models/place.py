@@ -58,7 +58,7 @@ class Place(BaseModel):
             ValueError: If it's empty or longer than 100 characters
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("Place title must be a string.")
+            raise TypeError("Place title must be a non-empty string.")
         if value == "" or len(value) > 100:
             raise ValueError("Place title must be\
 between 1 and 100 characters.")
@@ -84,7 +84,7 @@ between 1 and 100 characters.")
             TypeError: If it's not a string or doesn't exist
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("Place description must be a string.")
+            raise TypeError("Place description must be a non-empty string.")
         self.__description = value
 
     @property

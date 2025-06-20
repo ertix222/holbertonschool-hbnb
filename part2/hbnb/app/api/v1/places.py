@@ -40,6 +40,7 @@ class PlaceList(Resource):
     @api.expect(place_model)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
+    @api.response(404, 'Owner not found')
     @api.response(401, 'No input data')
     def post(self):
         """Register a new place"""
@@ -48,14 +49,18 @@ class PlaceList(Resource):
             if not data:
                 return {"error": "No data input"}, 401
 
-            user_id = data.get('owner_id')
+            user_id = data['owner'].id
             if not user_id:
                 return {"error": "User ID is required"}, 400
 
             userlist = facade.get_all_users()
-            check = any(user.get("id") == user_id for user in userlist)
-            if not check:
-                return {'Error': 'No valid ID provided'}, 400
+            user_found = False
+            for i in userlist:
+                if user_id == i.id:
+                    user_found = True
+                    break
+            if not user_found:
+                return {'Error': 'No valid ID provided'}, 404
 
             place = facade.create_place(data)
             return {
@@ -77,8 +82,6 @@ class PlaceList(Resource):
         """Retrieve a list of all places"""
         try:
             places = facade.get_all_places()
-            if not places:
-                return {'error': "not found"}, 404
             return [{
                 "id": p.id,
                 "title": p.title,

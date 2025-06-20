@@ -42,7 +42,7 @@ class Amenity(BaseModel):
             ValueError: If it's empty or longer than 50 characters
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("Amenity name must be a string.")
+            raise TypeError("Amenity name must be a non-empty string.")
         if value == "" or len(value) > 50:
             raise ValueError("Amenity name must be\
 between 1 and 50 characters.")

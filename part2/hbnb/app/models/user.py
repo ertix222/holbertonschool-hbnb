@@ -49,7 +49,7 @@ class User(BaseModel):
             ValueError: If it's empty or longer than 50 characters
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("User first name must be a string.")
+            raise TypeError("User first name must be a non-empty string.")
         if value == "" or len(value) > 50:
             raise ValueError("User first name must be\
 between 1 and 50 characters.")
@@ -76,7 +76,7 @@ between 1 and 50 characters.")
             ValueError: If it's empty or longer than 50 characters
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("User last name must be a string.")
+            raise TypeError("User last name must be a non-empty string.")
         if value == "" or len(value) > 50:
             raise ValueError("User last name must be\
 between 1 and 50 characters.")
@@ -103,7 +103,7 @@ between 1 and 50 characters.")
             ValueError: If it's empty or not in the right email format
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("User email must be a string.")
+            raise TypeError("User email must be a non-empty string.")
         if value == "" or not self.email_validator(value):
             raise ValueError("User email must be in the following format: "
                              + "ex-am_ple123@ex-am_ple.com).")

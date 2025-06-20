@@ -47,7 +47,7 @@ class Review(BaseModel):
             ValueError: If it's empty
         """
         if not (value and isinstance(value, str)):
-            raise TypeError("Review text must be a string.")
+            raise TypeError("Review text must be a non-empty string.")
         if value == "":
             raise ValueError("Review text must not be textless")
         self.__text = value
