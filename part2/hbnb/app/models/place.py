@@ -11,7 +11,7 @@ class Place(BaseModel):
         BaseModel (class): Base class for all objects,
             that places inherit of
     """
-    def __init__(self, title, price, latitude, longitude, owner,
+    def __init__(self, title, price, latitude, longitude, owner_id,
                  description=""):
         """Place constructor
 
@@ -31,7 +31,7 @@ class Place(BaseModel):
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
-        self.owner = owner
+        self.owner_id = owner_id
         super().__init__()
 
         self.owner.add_place(self)
