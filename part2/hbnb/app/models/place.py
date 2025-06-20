@@ -11,7 +11,7 @@ class Place(BaseModel):
         BaseModel (class): Base class for all objects,
             that places inherit of
     """
-    def __init__(self, title, price, latitude, longitude, owner_id,
+    def __init__(self, title, price, latitude, longitude, owner,
                  description=""):
         """Place constructor
 
@@ -31,10 +31,9 @@ class Place(BaseModel):
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
-        self.owner_id = owner_id
+        self.owner = owner
         super().__init__()
 
-        self.owner.add_place(self)
         self.reviews = []
         self.amenities = []
 
@@ -197,6 +196,9 @@ between -180.0 and 180.0.")
 
     def add_amenity(self, amenity):
         """Add an amenity to the place."""
+        for i in self.amenities:
+            if amenity.id == i.id or amenity.name() == i.name():
+                raise AttributeError("Amenity already is in the place")
         self.amenities.append(amenity)
 
     def list_amenities(self):

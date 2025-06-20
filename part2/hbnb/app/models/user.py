@@ -124,4 +124,7 @@ between 1 and 50 characters.")
 
     def add_place(self, place):
         """Add a place to the user."""
+        for i in self.places:
+            if place.id == i.id:
+                raise AttributeError("Place already is owned by the user")
         self.places.append(place)

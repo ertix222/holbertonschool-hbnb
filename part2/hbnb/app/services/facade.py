@@ -23,18 +23,34 @@ class HBnBFacade:
         Returns:
             User: A new user
         """
-        user = User(**user_data)
-        self.user_repo.add(user)
-        return user
+        try:
+            user = User(**user_data)
+            if self.user_repo.get_by_attribute('email', user_data["email"]):
+                raise AttributeError("Email already used")
+            if self.user_repo.get_by_attribute('id', user_data["id"]):
+                raise AttributeError("User alrady in repository")
+            self.user_repo.add(user)
+            return user
+        except Exception as e:
+            print(e)
 
     def get_user(self, user_id):
-        return self.user_repo.get(user_id)
+        try:
+            return self.user_repo.get(user_id)
+        except Exception as e:
+            print(e)
 
     def get_user_by_email(self, email):
-        return self.user_repo.get_by_attribute('email', email)
+        try:
+            return self.user_repo.get_by_attribute('email', email)
+        except Exception as e:
+            print(e)
 
     def get_all_users(self):
-        return self.user_repo.get_all()
+        try:
+            return self.user_repo.get_all()
+        except Exception as e:
+            print(e)
 
     # ===Amenity facade methods===
 
@@ -49,6 +65,11 @@ class HBnBFacade:
         """
         try:
             amenity = Amenity(**amenity_data)
+            existing_amenity = self.amenity_repo.get_by_attribute('name', amenity.name())
+            if existing_amenity:
+                return existing_amenity
+            if self.amenity_repo.get_by_attribute('id', amenity.id):
+                raise AttributeError("Amenity already in repository")
             self.amenity_repo.add(amenity)
             return amenity
         except Exception as e:
@@ -62,7 +83,7 @@ class HBnBFacade:
 
     def get_amenity_by_name(self, amenity_name):
         try:
-            return self.user_repo.get_by_attribute('name', amenity_name)
+            return self.amenity_repo.get_by_attribute('name', amenity_name)
         except Exception as e:
             print(e)
 
@@ -91,23 +112,22 @@ class HBnBFacade:
 
     # ===Place facade methods===
 
-    # Placeholder method for fetching a place by ID
     def create_place(self, place_data):
-        owner = self.user_repo.get(place_data['owner_id'])
-        if not owner:
-            raise ValueError("Owner not found")
+        try:
+            owner = self.user_repo.get_by_attribute('id', place_data['owner'].id)
+            if not owner:
+                raise AttributeError(f"Owner {owner} doesn't exist")
+            if not isinstance(owner, User):
+                raise TypeError("Owner should be a user")
 
-        amenities = []
-        for amenity_id in place_data.get('amenities', []):
-            amenity = self.amenity_repo.get(amenity_id)
-            if not amenity:
-                raise ValueError(f"Amenity {amenity_id} not found")
-            amenities.append(amenity)
-
-        place = Place(**place_data)
-        place.amenities = amenities
-        self.place_repo.add(place)
-        return place
+            place = Place(**place_data)
+            if self.place_repo.get_by_attribute('id', place.id):
+                raise AttributeError("Place already exists")
+            self.place_repo.add(place)
+            owner.add_place(place)
+            return place
+        except Exception as e:
+                print(e)
 
     def get_place(self, place_id):
         """Fetch a place by ID
@@ -120,8 +140,8 @@ class HBnBFacade:
         """
         place = self.place_repo.get(place_id)
         if not place:
-            raise ValueError("Place not found")
-        owner = self.user_repo.get(place.owner_id)
+            raise AttributeError("Place not found")
+        owner = self.user_repo.get(place.owner.id)
         place.owner = owner
         return place
 
@@ -131,7 +151,7 @@ class HBnBFacade:
     def update_place(self, place_id, place_data):
         place = self.place_repo.get(place_id)
         if not place:
-            raise ValueError("Place not found")
+            raise AttributeError("Place not found")
         for key, value in place_data.items():
             setattr(place, key, value)
         return place

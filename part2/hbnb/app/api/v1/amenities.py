@@ -8,6 +8,18 @@ amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity')
 })
 
+place_model = api.model('AmenityPlace', {
+    'id': fields.String(required=True, description='Place ID'),
+    'title': fields.String(required=True, description='Title of the place'),
+    'description': fields.String(description='Description of the place'),
+    'price': fields.Float(required=True, description='Price per night'),
+    'latitude': fields.Float(required=True, description='Latitude of the place'),
+    'longitude': fields.Float(required=True, description='Longitude of the place'),
+    'owner': fields.String(required=True, description='Owner of the place'),
+    'reviews': fields.List(fields.String, required=False, description="List of reviews"),
+    'amenities': fields.List(fields.String, required=False, description="List of amenities")
+})
+
 
 @api.route('/')
 class AmenityList(Resource):
@@ -25,7 +37,7 @@ class AmenityList(Resource):
                 return {"error": "No data input"}, 401
             
             input_amenity_name = amenity_data["name"]
-            existing_amenity = facade.get_amenity_by_name(amenity_data["name"])
+            existing_amenity = facade.get_amenity_by_name(input_amenity_name)
             if existing_amenity:
                 return {"error": "Amenity with the same name already existing"}, 409
 
