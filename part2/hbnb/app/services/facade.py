@@ -158,45 +158,67 @@ class HBnBFacade:
         except Exception as e:
             raise Exception(e)
 
+    # ===Place facade methods===
+
     def create_review(self, review_data):
-        user = self.user_repo.get(review_data['user_id'])
-        if not user:
-            raise ValueError("User not found")
+        try:
+            writer = self.user_repo.get_by_attribute('id',
+                                                    review_data['user'].id)
+            if not writer:
+                raise AttributeError("Review writer doesn't exist")
+            if not isinstance(writer, User):
+                raise TypeError("Review writer should be a user")
+            
+            place = self.user_repo.get_by_attribute('id',
+                                                    review_data['place'].id)
+            if not place:
+                raise AttributeError("Place doesn't exist")
+            if not isinstance(place, Place):
+                raise TypeError("Place should be a place")
 
-        place = self.place_repo.get(review_data['place_id'])
-        if not place:
-            raise ValueError("Place not found")
-
-        rating = review_data['rating']
-        if not (1 <= rating <= 5):
-            raise ValueError("Rating must be between 1 and 5")
-
-        review = Review(**review_data)
-        self.review_repo.add(review)
-        return review
+            review = Review(**review_data)
+            self.review_repo.add(review)
+            place.add_review(review)
+            return review
+        except Exception as e:
+            raise Exception(e)
 
     def get_review(self, review_id):
-        return self.review_repo.get(review_id)
+        try:
+            return self.review_repo.get(review_id)
+        except Exception as e:
+                raise Exception(e)
 
     def get_all_reviews(self):
-        return self.review_repo.get_all()
+        try:
+            return self.review_repo.get_all()
+        except Exception as e:
+                    raise Exception(e)
 
     def get_reviews_by_place(self, place_id):
-        place = self.place_repo.get(place_id)
-        if not place:
-            raise ValueError("Place not found")
-        return place.reviews
+        try:
+            place = self.place_repo.get(place_id)
+            if not place:
+                raise AttributeError("Place not found")
+            return place.reviews
+        except Exception as e:
+                    raise Exception(e)
 
     def update_review(self, review_id, review_data):
-        review = self.review_repo.get(review_id)
-        if not review:
-            raise ValueError("Review not found")
-        for key, value in review_data.items():
-            setattr(review, key, value)
-        return review
+        try:
+            review = self.review_repo.get(review_id)
+            if not review:
+                raise AttributeError("Review not found")
+            review.update(review_data)
+            return review
+        except Exception as e:
+                    raise Exception(e)
 
     def delete_review(self, review_id):
-        review = self.review_repo.get(review_id)
-        if not review:
-            raise ValueError("Review not found")
-        self.review_repo.delete(review)
+        try:
+            review = self.review_repo.get(review_id)
+            if not review:
+                raise ValueError("Review not found")
+            self.review_repo.delete(review)
+        except Exception as e:
+                    raise Exception(e)
