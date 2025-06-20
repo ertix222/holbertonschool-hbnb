@@ -16,43 +16,63 @@ class ReviewList(Resource):
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
+    @api.response(401, 'No input data')
     def post(self):
         """Register a new review"""
-        data = api.payload
-        if not data:
-            return {"error": "No data provided"}, 400
-
-        #get the place before instanciating the review
-        place = facade.get_place(data["place_id"])
-        if not place:
-            return {"error": "Place not found"}, 404
-
-        userlist = facade.get_users_list()
-        check = any(user.get("id") == data['user_id'] for user in userlist)
-        if not check:
-            return {'Error': 'No valid ID provided'}, 400
-        if data["user_id"] == place.owner:
-            return {"error": "Cannot review your own place!"}, 403
-
         try:
+            data = api.payload
+            if not data:
+                return {"error": "No data provided"}, 401            
+            
+            user_id = data['owner_id']
+            if not user_id:
+                return {"error": "User ID is required"}, 400
+            
+            place_id = data['place_id']
+            if not place_id:
+                return {"error": "Place ID is required"}, 400
+            
+            writer = facade.get_user(user_id)
+            if not writer:
+                return {"error": "Writer not found"}, 404
+            
+            place = facade.get_place(place_id)
+            if not place:
+                return {"error": "Place not found"}, 404
+
+            userlist = facade.get_all_users()
+            user_found = False
+            for i in userlist:
+                if user_id == i.id:
+                    user_found = True
+                    break
+            if not user_found:
+                return {'Error': 'No valid writer ID provided'}, 404
+
+            if data["user_id"] == place.owner.id:
+                return {"error": "Cannot review your own place!"}, 403
+
+            data["user"] = writer
+            del data["owner_id"]
+            data["place"] = place
+            del data["place_id"]
+
             new_review = facade.create_review(data)
-            place.add_review(new_review)
             return {
                 "id": new_review.id,
                 "text": new_review.text,
                 "rating": new_review.rating,
-                "user_id": new_review.user_id,
-                "place_id": new_review.place_id
+                "user_id": new_review.user.id,
+                "place_id": new_review.place.id
             }, 201
         except Exception as e:
             return {"Error" : str(e)}, 400
 
 
-
-    @api.response(200, 'List of reviews retrieved successfully')
-    def get(self):
-        """Retrieve a list of all reviews"""
-        return facade.get_all_reviews()
+@api.response(200, 'List of reviews retrieved successfully')
+def get(self):
+    """Retrieve a list of all reviews"""
+    return facade.get_all_reviews()
 
 
 @api.route('/<review_id>')
