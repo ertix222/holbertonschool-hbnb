@@ -12,10 +12,10 @@ class HBnBFacade:
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
-    # ===User facade placeholder methods===
+    # ===User facade methods===
 
     def create_user(self, user_data):
-        """Placeholder method for creating a user
+        """Creates a user
 
         Args:
             user_data (dict): User arguments dictionary
@@ -36,10 +36,10 @@ class HBnBFacade:
     def get_all_users(self):
         return self.user_repo.get_all()
 
-    # ===Amenity facade placeholder methods===
+    # ===Amenity facade methods===
 
     def create_amenity(self, amenity_data):
-        """Placeholder for logic to create an amenity
+        """Creates an amenity
 
         Args:
             amenity_data (dict): Amenity arguments dictionary
@@ -47,9 +47,12 @@ class HBnBFacade:
         Returns:
             Amenity: A new amenity
         """
-        amenity = Amenity(**amenity_data)
-        self.amenity_repo.add(amenity)
-        return amenity
+        try:
+            amenity = Amenity(**amenity_data)
+            self.amenity_repo.add(amenity)
+            return amenity
+        except Exception as e:
+            print(e)
 
     def get_amenity(self, amenity_id):
         try:
@@ -57,8 +60,14 @@ class HBnBFacade:
         except Exception as e:
             print(e)
 
+    def get_amenity_by_name(self, amenity_name):
+        try:
+            return self.user_repo.get_by_attribute('name', amenity_name)
+        except Exception as e:
+            print(e)
+
     def get_all_amenities(self):
-        """Placeholder for logic to retrieve all amenities
+        """Retrieve all amenities
 
         Returns:
             list: List of all amenities
@@ -69,7 +78,7 @@ class HBnBFacade:
             print(e)
 
     def update_amenity(self, amenity_id, amenity_data):
-        """Placeholder for logic to update an amenity
+        """Update an amenity
 
         Args:
             amenity_id (uuid): The ID of the amenity
@@ -80,10 +89,10 @@ class HBnBFacade:
         except Exception as e:
             print(e)
 
-    # ===Place facade placeholder methods===
+    # ===Place facade methods===
 
     def get_place(self, place_id):
-        """Placeholder method for fetching a place by ID
+        """Fetch a place by ID
 
         Args:
             place_id (uuid): The place ID
