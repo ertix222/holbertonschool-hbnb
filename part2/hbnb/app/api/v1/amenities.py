@@ -8,18 +8,6 @@ amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity')
 })
 
-place_model = api.model('AmenityPlace', {
-    'id': fields.String(required=True, description='Place ID'),
-    'title': fields.String(required=True, description='Title of the place'),
-    'description': fields.String(description='Description of the place'),
-    'price': fields.Float(required=True, description='Price per night'),
-    'latitude': fields.Float(required=True, description='Latitude of the place'),
-    'longitude': fields.Float(required=True, description='Longitude of the place'),
-    'owner': fields.String(required=True, description='Owner of the place'),
-    'reviews': fields.List(fields.String, required=False, description="List of reviews"),
-    'amenities': fields.List(fields.String, required=False, description="List of amenities")
-})
-
 
 @api.route('/')
 class AmenityList(Resource):
@@ -32,14 +20,14 @@ class AmenityList(Resource):
         """Register a new amenity"""
         try:
             amenity_data = api.payload
-
             if not amenity_data:
                 return {"error": "No data input"}, 401
-            
+
             input_amenity_name = amenity_data["name"]
             existing_amenity = facade.get_amenity_by_name(input_amenity_name)
             if existing_amenity:
-                return {"error": "Amenity with the same name already existing"}, 409
+                return {"error": "Amenity with the same name\
+already existing"}, 409
 
             if not (input_amenity_name
                     and isinstance(input_amenity_name, str)):
@@ -57,41 +45,51 @@ or too long (50 chars)"}, 400
             return {"error": str(e)}, 400
 
     @api.response(200, 'List of amenities retrieved successfully')
+    @api.response(400, 'Invalid input data')
     def get(self):
         """Retrieve a list of all amenities"""
-        amenities = facade.get_all_amenities()
-        return [
-            {
-                'id': amenity.id,
-                'name': amenity.name
-            } for amenity in amenities
-        ], 200
+        try:
+            amenities = facade.get_all_amenities()
+            return [
+                {
+                    'id': amenity.id,
+                    'name': amenity.name
+                } for amenity in amenities], 200
+        except Exception as e:
+            return {"error": str(e)}, 400
 
 
 @api.route('/<amenity_id>')
 class AmenityResource(Resource):
     @api.response(200, 'Amenity details retrieved successfully')
+    @api.response(400, 'Invalid input data')
     @api.response(404, 'Amenity not found')
     def get(self, amenity_id):
         """Get amenity details by ID"""
-        amenity = facade.get_amenity(amenity_id)
+        try:
+            amenity = facade.get_amenity(amenity_id)
 
-        if not amenity:
-            return {"error": "Amenity not found"}, 404
+            if not amenity:
+                return {"error": "Amenity not found"}, 404
 
-        return {
-                'id': amenity.id,
-                'name': amenity.name
-                }, 200
+            return {
+                    'id': amenity.id,
+                    'name': amenity.name
+                    }, 200
+        except Exception as e:
+            return {"error": str(e)}, 400
 
     @api.expect(amenity_model)
     @api.response(200, 'Amenity updated successfully')
     @api.response(404, 'Amenity not found')
+    @api.response(401, 'No input data')
     @api.response(400, 'Invalid input data')
     def put(self, amenity_id):
         """Update an amenity's information"""
         try:
             amenity_data = api.payload
+            if not amenity_data:
+                return {"error": "No data input"}, 401
 
             amenity = facade.get_amenity(amenity_id)
             if not amenity:

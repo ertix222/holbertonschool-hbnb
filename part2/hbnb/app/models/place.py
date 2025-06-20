@@ -197,7 +197,7 @@ between -180.0 and 180.0.")
     def add_amenity(self, amenity):
         """Add an amenity to the place."""
         for i in self.amenities:
-            if amenity.id == i.id or amenity.name() == i.name():
+            if amenity.id == i.id or amenity.name == i.name:
                 raise AttributeError("Amenity already is in the place")
         self.amenities.append(amenity)
 
@@ -205,14 +205,3 @@ between -180.0 and 180.0.")
         """List of amenities associated with the place"""
         for i in self.amenities:
             print(i)
-
-    def to_dict(self):
-        """Returns only the necessary attributes."""
-        return {
-        "title": self.title,
-        "description": self.description, 
-        "price": self.price,
-        "latitude": self.latitude,
-        "longitude": self.longitude,
-        "id": self.id
-        }

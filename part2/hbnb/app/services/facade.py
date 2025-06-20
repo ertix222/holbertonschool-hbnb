@@ -65,7 +65,8 @@ class HBnBFacade:
         """
         try:
             amenity = Amenity(**amenity_data)
-            existing_amenity = self.amenity_repo.get_by_attribute('name', amenity.name())
+            existing_amenity = self.amenity_repo.get_by_attribute('name',
+                                                                  amenity.name)
             if existing_amenity:
                 return existing_amenity
             if self.amenity_repo.get_by_attribute('id', amenity.id):
@@ -102,7 +103,7 @@ class HBnBFacade:
         """Update an amenity
 
         Args:
-            amenity_id (uuid): The ID of the amenity
+            amenity_id (str): The ID of the amenity
             amenity_data (dict): Dictionary of all the amenity args
         """
         try:
@@ -114,7 +115,8 @@ class HBnBFacade:
 
     def create_place(self, place_data):
         try:
-            owner = self.user_repo.get_by_attribute('id', place_data['owner'].id)
+            owner = self.user_repo.get_by_attribute('id',
+                                                    place_data['owner'].id)
             if not owner:
                 raise AttributeError(f"Owner {owner} doesn't exist")
             if not isinstance(owner, User):
@@ -127,13 +129,13 @@ class HBnBFacade:
             owner.add_place(place)
             return place
         except Exception as e:
-                print(e)
+            print(e)
 
     def get_place(self, place_id):
         """Fetch a place by ID
 
         Args:
-            place_id (uuid): The place ID
+            place_id (str): The place ID
 
         Return:
             Place: The place corrsponding to the ID
@@ -141,17 +143,17 @@ class HBnBFacade:
         place = self.place_repo.get(place_id)
         if not place:
             raise AttributeError("Place not found")
-        owner = self.user_repo.get(place.owner.id)
-        place.owner = owner
         return place
 
     def get_all_places(self):
         return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
-        place = self.place_repo.get(place_id)
-        if not place:
-            raise AttributeError("Place not found")
-        for key, value in place_data.items():
-            setattr(place, key, value)
-        return place
+        try:
+            place = self.place_repo.get(place_id)
+            if not place:
+                raise AttributeError("Place not found")
+            place.update(place_data)
+            return place
+        except Exception as e:
+            print(e)
