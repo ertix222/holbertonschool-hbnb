@@ -91,6 +91,24 @@ class HBnBFacade:
 
     # ===Place facade methods===
 
+    # Placeholder method for fetching a place by ID
+    def create_place(self, place_data):
+        owner = self.user_repo.get(place_data['owner_id'])
+        if not owner:
+            raise ValueError("Owner not found")
+
+        amenities = []
+        for amenity_id in place_data.get('amenities', []):
+            amenity = self.amenity_repo.get(amenity_id)
+            if not amenity:
+                raise ValueError(f"Amenity {amenity_id} not found")
+            amenities.append(amenity)
+
+        place = Place(**place_data)
+        place.amenities = amenities
+        self.place_repo.add(place)
+        return place
+
     def get_place(self, place_id):
         """Fetch a place by ID
 
@@ -100,4 +118,20 @@ class HBnBFacade:
         Return:
             Place: The place corrsponding to the ID
         """
-        return self.place_repo.get(place_id)
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValueError("Place not found")
+        owner = self.user_repo.get(place.owner_id)
+        place.owner = owner
+        return place
+
+    def get_all_places(self):
+        return self.place_repo.get_all()
+
+    def update_place(self, place_id, place_data):
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValueError("Place not found")
+        for key, value in place_data.items():
+            setattr(place, key, value)
+        return place
