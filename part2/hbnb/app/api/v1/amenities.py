@@ -42,7 +42,7 @@ or too long (50 chars)"}, 400
                 'name': new_amenity.name
                 }, 201
         except Exception as e:
-            return {"error": e}, 400
+            return {"error": str(e)}, 400
 
     @api.response(200, 'List of amenities retrieved successfully')
     def get(self):
@@ -96,4 +96,4 @@ is empty or too long (50 chars)"}, 400
             facade.update_amenity(amenity_id, amenity_data)
             return {"message": "Amenity updated successfully"}, 200
         except Exception as e:
-            return {"error": e}, 400
+            return {"error": str(e)}, 400

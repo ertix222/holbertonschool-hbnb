@@ -40,7 +40,7 @@ class UserList(Resource):
                     'updated_at': new_user.updated_at
                     }, 201
         except Exception as e:
-            return {"error": e}, 400
+            return {"error": str(e)}, 400
 
     @api.response(200, 'List of users retrieved successfully')
     def get(self):
