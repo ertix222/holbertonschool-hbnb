@@ -31,7 +31,8 @@ already existing"}, 409
 
             if not (input_amenity_name
                     and isinstance(input_amenity_name, str)):
-                return {"error": "Amenity name must be a non-empty string"}, 400
+                return {"error": "Amenity name must be\
+a non-empty string"}, 400
             if input_amenity_name == "" or len(input_amenity_name) > 50:
                 return {"error": "Amenity name is empty\
 or too long (50 chars)"}, 400
@@ -98,7 +99,8 @@ class AmenityResource(Resource):
             input_amenity_name = amenity_data["name"]
             if not (input_amenity_name
                     and isinstance(input_amenity_name, str)):
-                return {"error": "Amenity new name must be a non-empty string"}, 400
+                return {"error": "Amenity new name must\
+be a non-empty string"}, 400
             if input_amenity_name == "" or len(input_amenity_name) > 50:
                 return {"error": "Amenity new name\
 is empty or too long (50 chars)"}, 400
