@@ -12,6 +12,7 @@ user_model = api.model('User', {
     'email': fields.String(required=True, description='Email of the user')
 })
 
+
 @api.route('/')
 class UserList(Resource):
     @api.expect(user_model, validate=True)
@@ -20,42 +21,31 @@ class UserList(Resource):
     @api.response(400, 'Invalid input data')
     def post(self):
         """Register a new user"""
-        try:
-            user_data = api.payload
+        user_data = api.payload
 
-            # Simulate email uniqueness check
-            # (to be replaced by real validation with persistence)
-            existing_user = facade.get_user_by_email(user_data['email'])
-            if existing_user:
-                return {'error': 'Email already registered'}, 409
+        # Simulate email uniqueness check
+        existing_user = facade.get_user_by_email(user_data['email'])
+        if existing_user:
+            return {'error': 'Email already registered'}, 409
 
-            new_user = facade.create_user(user_data)
-            return {
-                    'id': new_user.id,
-                    'first_name': new_user.first_name(),
-                    'last_name': new_user.last_name(),
-                    'email': new_user.email(),
-                    'created_at': new_user.created_at,
-                    'updated_at': new_user.updated_at
-                    }, 201
-        except Exception as e:
-            return {"error": str(e)}, 400
+        new_user = facade.create_user(user_data)
+        return {'id': new_user.id,
+                'first_name': new_user.first_name,
+                'last_name': new_user.last_name,
+                'email': new_user.email
+                }, 201
 
     @api.response(200, 'List of users retrieved successfully')
     def get(self):
         """retrieve a list of all users"""
         users = facade.get_all_users()
         return [
-            {
-                'id': user.id,
-                'first_name': user.first_name(),
-                'last_name': user.last_name(),
-                'email': user.email(),
-                'created_at': user.created_at,
-                'updated_at': user.updated_at
-                }
+            {'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email}
             for user in users
-            ], 200
+        ], 200
 
 
 @api.route('/<user_id>')
@@ -67,11 +57,8 @@ class UserResource(Resource):
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
-        return {
-                'id': user.id,
-                'first_name': user.first_name(),
-                'last_name': user.last_name(),
-                'email': user.email(),
-                'created_at': user.created_at,
-                'updated_at': user.updated_at
+        return {'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email
                 }, 200

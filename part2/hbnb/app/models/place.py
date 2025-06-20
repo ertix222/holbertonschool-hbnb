@@ -34,7 +34,6 @@ class Place(BaseModel):
         self.owner_id = owner_id
         super().__init__()
 
-        self.owner.add_place(self)
         self.reviews = []
         self.amenities = []
 
@@ -203,3 +202,14 @@ between -180.0 and 180.0.")
         """List of amenities associated with the place"""
         for i in self.amenities:
             print(i)
+
+    def to_dict(self):
+        """Returns only the necessary attributes."""
+        return {
+        "title": self.title,
+        "description": self.description, 
+        "price": self.price,
+        "latitude": self.latitude,
+        "longitude": self.longitude,
+        "id": self.id
+        }
