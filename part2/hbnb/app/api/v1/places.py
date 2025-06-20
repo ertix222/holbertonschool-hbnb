@@ -36,6 +36,13 @@ class PlaceList(Resource):
     def post(self):
         """Register a new place"""
         data = api.payload
+        user_id = data.get('owner_id')
+        if not user_id:
+            return {"error": "User ID is required"}, 400
+        userlist = facade.get_users_list()
+        check = any(user.get("id") == user_id for user in userlist)
+        if not check:
+            return {'Error': 'No valid ID provided'}, 400
         try:
             place = facade.create_place(data)
             return place.to_dict(), 201
