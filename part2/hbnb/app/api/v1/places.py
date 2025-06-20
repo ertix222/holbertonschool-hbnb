@@ -18,20 +18,13 @@ user_model = api.model('PlaceUser', {
 
 # Define the place model for input validation and documentation
 place_model = api.model('Place', {
-    'title': fields.String(required=True,
-                           description='Title of the place'),
+    'title': fields.String(required=True, description='Title of the place'),
     'description': fields.String(description='Description of the place'),
-    'price': fields.Float(required=True,
-                          description='Price per night'),
-    'latitude': fields.Float(required=True,
-                             description='Latitude of the place'),
-    'longitude': fields.Float(required=True,
-                              description='Longitude of the place'),
-    'owner_id': fields.String(required=True,
-                              description='ID of the owner'),
-    'amenities': fields.List(fields.String,
-                             required=True,
-                             description="List of amenities ID's")
+    'price': fields.Float(required=True, description='Price per night'),
+    'latitude': fields.Float(required=True, description='Latitude of the place'),
+    'longitude': fields.Float(required=True, description='Longitude of the place'),
+    'owner_id': fields.String(required=True, description='ID of the owner'),
+    'amenities': fields.List(fields.String, required=True, description="List of amenities ID's")
 })
 
 
@@ -49,7 +42,7 @@ class PlaceList(Resource):
             if not data:
                 return {"error": "No data input"}, 401
 
-            user_id = data['owner'].id
+            user_id = data['owner_id']
             if not user_id:
                 return {"error": "User ID is required"}, 400
 
@@ -60,8 +53,14 @@ class PlaceList(Resource):
                     user_found = True
                     break
             if not user_found:
-                return {'Error': 'No valid ID provided'}, 404
+                return {'Error': 'No valid owner ID provided'}, 404
 
+            owner = facade.user_repo.get_by_attribute('id', user_id)
+            if not owner:
+                return {"error": "Owner not found"}, 404
+
+            data["owner"] = owner
+            del data["owner_id"]
             place = facade.create_place(data)
             return {
                 "id": place.id,
